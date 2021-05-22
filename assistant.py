@@ -1,5 +1,6 @@
 import pyttsx3 # text-to-speech module
 import datetime
+import speech_recognition as sr # for speech recognition, to take commands through speech, requires internet
 
 engine = pyttsx3.init() # initialisation
 # voice selection
@@ -41,4 +42,22 @@ def wishme():
     date()
     time()
 
-wishme()
+def takeCommand():
+    r = sr.Recognizer() # initialization
+    with sr.Microphone() as source: # defining mic as a source for commands
+        print('Listening....')
+        r.pause_threshold = 1 # waits for 1 second before it starts listening
+        audio = r.listen(source)
+    
+    try:
+        print('Recognizing....')
+        query = r.recognize_google(audio, 'en=IN')
+        print(query)
+    except Exception as e:
+        print(e)
+        speak('Unable to recognize your command. Please say it again!')
+        return "None"
+    
+    return query
+
+takeCommand()
