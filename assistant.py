@@ -6,7 +6,7 @@ engine = pyttsx3.init() # initialisation
 voices = engine.getProperty('voices') # obtain voice properties from the module
 engine.setProperty('voice', voices[1].id) # [1] for female voice and [0] for male voice. 0 to 5, total 6 different voices.
 # speed selection
-newVoiceRate = 140 # words per minute
+newVoiceRate = 150 # words per minute
 engine.setProperty('rate', newVoiceRate)
 
 
@@ -24,3 +24,21 @@ def date():
     month = m[int(datetime.datetime.now().month)]
     date = str(datetime.datetime.now().day)
     speak('Today\'s date is {} {} {}'.format(month,date,year))
+
+def wishme():
+    hour = datetime.datetime.now().hour
+
+    if 6<=hour<12:
+        speak('Good morning sir!')
+    elif 12<=hour<18:
+        speak('Good afternoon sir!')
+    elif 18<=hour<20:
+        speak('Good evening sir!')
+    else:
+        speak('Good night sir!')
+
+    speak('Cipher is always at your service. How may I help you? But before that, let me share with you the present time and date.')
+    date()
+    time()
+
+wishme()
