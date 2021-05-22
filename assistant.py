@@ -38,9 +38,8 @@ def wishme():
     else:
         speak('Good night sir!')
 
-    speak('Cipher is always at your service. How may I help you? But before that, let me share with you the present time and date.')
-    date()
-    time()
+    speak('Cipher is always at your service. How may I help you?')
+
 
 def takeCommand():
     r = sr.Recognizer() # initialization
@@ -60,4 +59,17 @@ def takeCommand():
     
     return query
 
-takeCommand()
+# main functiion
+if __name__=="__main__":
+    wishme()
+    while True:
+        query = takeCommand().lower()
+        print(query)
+
+        if 'time' in query: # if asked for time
+            time()
+        elif 'date' in query: # if asked for date
+            date()
+        elif 'offline' in query: # to stop our assistant
+            quit()
+        
