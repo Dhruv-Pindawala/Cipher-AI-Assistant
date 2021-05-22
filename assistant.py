@@ -1,4 +1,5 @@
 import pyttsx3 # text-to-speech module
+import datetime
 
 engine = pyttsx3.init() # initialisation
 # voice selection
@@ -13,4 +14,13 @@ def speak(message):
     engine.say(message)
     engine.runAndWait()
 
-speak('hello there')
+def time():
+    Time = datetime.datetime.now().strftime("%I:%p:%M 'minutes and' %S 'seconds")
+    speak('The present time is {}'.format(Time))
+
+def date():
+    year = str(datetime.datetime.now().year)
+    m = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    month = m[int(datetime.datetime.now().month)]
+    date = str(datetime.datetime.now().day)
+    speak('Today\'s date is {} {} {}'.format(month,date,year))
