@@ -7,6 +7,9 @@ import os
 import pyautogui # for screenshots
 import psutil # cpu and batery updates
 import pyjokes # for jokes
+from urllib.request import urlopen
+import json
+import requests
 
 engine = pyttsx3.init() # initialisation
 # voice selection
@@ -132,3 +135,40 @@ if __name__=="__main__":
             cpu()
         elif 'joke' in query:
             jokes()
+        elif 'news' in query:
+            try:
+                jsonobj = urlopen('''https://newsapi.org / v1 / articles?source = the-times-of-india&sortBy = top&apiKey ={}''').format(os.environ.get('news_api'))
+                data = json.load(jsonobj)
+                i = 1
+                speak("Here are some top news from the times of india")
+                for news in data['articles']:
+                    speak(str(i) + '.' + news['title'])
+                    speak('Description of this news is printed is printed on screen')
+                    print(str(i) + '.' + news['title'] + '\n')
+                    print(news['description']+'\n')
+                    i+=1
+            except Exception as e:
+                print(str(e))
+        elif 'weather' in query:
+            api_key = os.environ.get('weather_api')
+            base_url = "http://api.openweathermap.org / data / 2.5 / weather?"
+            speak("City name ")
+            print("City name : ")
+            city_name = takeCommand()
+            print(city_name)
+            complete_url = base_url + "appid =" + api_key + "&q =" + city_name
+            response = requests.get(complete_url)
+            x = response.json()
+             
+            if x["cod"] != "404":
+                y = x["main"]
+                current_temperature = y["temp"]
+                current_pressure = y["pressure"]
+                current_humidiy = y["humidity"]
+                z = x["weather"]
+                weather_description = z[0]["description"]
+                print(" Temperature (in kelvin unit) = " +str(current_temperature)+"\n atmospheric pressure (in hPa unit) ="+str(current_pressure) +"\n humidity (in percentage) = " +str(current_humidiy) +"\n description = " +str(weather_description))
+             
+            else:
+                speak(" City Not Found ")
+        
