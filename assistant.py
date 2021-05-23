@@ -2,6 +2,8 @@ import pyttsx3 # text-to-speech module
 import datetime
 import speech_recognition as sr # for speech recognition, to take commands through speech, requires internet
 import wikipedia
+import webbrowser as wb
+import os
 
 engine = pyttsx3.init() # initialisation
 # voice selection
@@ -45,7 +47,7 @@ def takeCommand():
     r = sr.Recognizer() # initialization
     mic = sr.Microphone()
     with mic as source: # defining mic as a source for commands
-        r.adjust_for_ambient_noise(source, duration=0.2)
+        r.adjust_for_ambient_noise(source)
         print('Listening....')
         r.pause_threshold = 1
         audio = r.listen(source)
@@ -77,7 +79,22 @@ if __name__=="__main__":
         elif 'wikipedia' in query: # for wiki search
             speak('Searching...')
             query = query.replace('wikipedia', '')
-            print(query)
             result = wikipedia.summary(query)
             print(result)
+            speak('According to wikipedia')
             speak(result)
+        elif 'search' in query: # search using chrome
+            speak('What should I search')
+            chromepath = 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe %s'
+            search = takeCommand().lower()
+            wb.get(chromepath).open_new_tab(search + '.com')
+        elif 'logout' in query:
+            os.system('shutdown - 1')
+        elif 'shutdown' in query:
+            os.system('shutdown /s /t 1')
+        elif 'restart' in query:
+            os.system('shutdown /r')
+        elif 'play songs' in query:
+            songs_dir = '' #path to my local songs folder
+            songs = os.listdir(songs_dir)
+            os.startfile(os.path.join(songs_dir, songs[0]))
