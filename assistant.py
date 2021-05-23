@@ -4,6 +4,8 @@ import speech_recognition as sr # for speech recognition, to take commands throu
 import wikipedia
 import webbrowser as wb
 import os
+import pyautogui # for screenshots
+import psutil # cpu and batery updates
 
 engine = pyttsx3.init() # initialisation
 # voice selection
@@ -63,6 +65,18 @@ def takeCommand():
     
     return query
 
+def screenshot():
+    img = pyautogui.screenshot()
+    img.save('path including image name')
+
+def cpu():
+    usage = str(psutil.cpu_percent)
+    speak("currently the cpu is running at {} percent usage".format(usage))
+
+    battery = psutil.sensors_battery
+    speak('battery is at', str(battery.percent))
+
+
 # main functiion
 if __name__=="__main__":
     wishme()
@@ -98,3 +112,18 @@ if __name__=="__main__":
             songs_dir = '' #path to my local songs folder
             songs = os.listdir(songs_dir)
             os.startfile(os.path.join(songs_dir, songs[0]))
+        elif 'remember' in query:
+            speak('what should i remember?')
+            data = takeCommand()
+            speak('You asked me to remember that', data)
+            remember = open('data.txt')
+            remember.write(data)
+            remember.close()
+        elif 'do you remember anything' in query:
+            remember = open('data.txt', 'r')
+            speak('You asked me to remember that', remember.read())
+        elif 'screenshot' in query:
+            screenshot()
+            speak('screenshot captured')
+        elif 'cpu' in query:
+            cpu()
